@@ -8,7 +8,6 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
 from snippets.permissions import IsOwnerOrReadOnly
-from tutorial.snippets import serializers
 
 class SnippetViewSet(viewsets.ModelViewSet):
     """
