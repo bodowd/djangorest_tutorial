@@ -2,3 +2,9 @@ GET http://127.0.0.1:8000/snippets
 
 ###
 GET http://127.0.0.1:8000/snippets/1
+
+###
+GET http://127.0.0.1:8000/users
+
+###
+GET http://127.0.0.1:8000/users/1

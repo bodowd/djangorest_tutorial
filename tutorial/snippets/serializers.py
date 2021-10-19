@@ -1,10 +1,15 @@
 from rest_framework import serializers
 from snippets.models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES
+from django.contrib.auth.models import User
 
 class SnippetSerializer(serializers.ModelSerializer):
+    # source argument controls which attribute is used to populate a field, and can point at any attribute on the serialized instance
+    # ReadOnlyField is used for serialized representations, but not used for updating model instances when they are deserialized
+    # could have also used CharField(read_only=True)
+    owner = serializers.ReadOnlyField(source='owner.username')
     class Meta:
         model = Snippet
-        fields = ['id', 'title', 'code', 'linenos', 'language', 'style']
+        fields = ['id', 'title', 'code', 'linenos', 'language', 'style', 'owner']
 
     def create(self, validated_data):
         """
@@ -23,4 +28,10 @@ class SnippetSerializer(serializers.ModelSerializer):
         instance.style = validated_data.get('style', instance.style)
         instance.save()
         return instance
+    
 
+class UserSerializer(serializers.ModelSerializer):
+    snippets = serializers.PrimaryKeyRelatedField(many=True, queryset=Snippet.objects.all())
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'snippets']
